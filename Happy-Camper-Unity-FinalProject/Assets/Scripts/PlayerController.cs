@@ -5,7 +5,7 @@ public class PlayerController : MonoBehaviour
 {
 
 	private Rigidbody2D rigidBody;
-	private float jumpSpeed = 60f;
+	private float jumpSpeed = 20f;
 
 	private bool onGround = true;
 

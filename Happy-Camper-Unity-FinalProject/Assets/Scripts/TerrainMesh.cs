@@ -14,16 +14,24 @@ public class TerrainMesh : MonoBehaviour
 	private List<Vector3> vertices = new List<Vector3> ();
 	private List<int> triangles = new List<int> ();
 	private List<Vector2> textureCoords = new List<Vector2> ();
-	private List<Vector2> borderPoints = new List<Vector2>();
+	private List<Vector2> borderPoints = new List<Vector2> ();
 
 	private float textureSize = 1024;
+
+	public Vector3 endPoint; 
+
 
 	void Start ()
 	{
 
+	}
+
+	public void GenerateTerrain ()
+	{
 		// Get a reference to the mesh component and clear it
 		MeshFilter filter = GetComponent<MeshFilter> ();
 		mesh = filter.mesh;
+
 		mesh.Clear ();
 
 		// Generate 4 random points for the top 
@@ -31,12 +39,15 @@ public class TerrainMesh : MonoBehaviour
 		for (int i = 0; i < points.Length; i++) {            
 			points [i] = new Vector3 (10f * (float)i, Random.Range (5f, 10f), 0f);
 		}
+
 		CreateCurve ();
 
 		//Set the points for the edge collider
 		EdgeCollider2D edgeCollider = GetComponent<EdgeCollider2D> ();
 		edgeCollider.Reset ();
 		edgeCollider.points = borderPoints.ToArray ();
+
+		endPoint = borderPoints[borderPoints.Count - 1];
 
 		// Assign the vertices and triangles to the mesh
 		mesh.vertices = vertices.ToArray ();
@@ -45,6 +56,7 @@ public class TerrainMesh : MonoBehaviour
 
 		mesh.RecalculateBounds ();
 		mesh.RecalculateNormals ();
+	
 	}
 
 	void CreateCurve ()
