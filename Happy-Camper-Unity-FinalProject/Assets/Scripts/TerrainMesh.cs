@@ -14,6 +14,7 @@ public class TerrainMesh : MonoBehaviour
 	private List<Vector3> vertices = new List<Vector3> ();
 	private List<int> triangles = new List<int> ();
 	private List<Vector2> textureCoords = new List<Vector2> ();
+	private List<Vector2> borderPoints = new List<Vector2>();
 
 	private float textureSize = 1024;
 
@@ -31,6 +32,11 @@ public class TerrainMesh : MonoBehaviour
 			points [i] = new Vector3 (10f * (float)i, Random.Range (5f, 10f), 0f);
 		}
 		CreateCurve ();
+
+		//Set the points for the edge collider
+		EdgeCollider2D edgeCollider = GetComponent<EdgeCollider2D> ();
+		edgeCollider.Reset ();
+		edgeCollider.points = borderPoints.ToArray ();
 
 		// Assign the vertices and triangles to the mesh
 		mesh.vertices = vertices.ToArray ();
@@ -74,6 +80,8 @@ public class TerrainMesh : MonoBehaviour
 
 	void CreateMeshForPoint (Vector3 point)
 	{
+		borderPoints.Add (new Vector2 (point.x, point.y));
+
 		// Create a corresponding point along the bottom
 		vertices.Add (new Vector3 (point.x, 0f, 0f));
 		textureCoords.Add (new Vector2 (point.x / textureSize, 0));
