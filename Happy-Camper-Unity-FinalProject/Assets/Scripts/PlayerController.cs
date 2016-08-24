@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
 		rigidBody = GetComponent<Rigidbody2D> ();
 	}
 
+	// FixedUpdate should be used instead of Update when dealing with rigidbodies
 	void FixedUpdate ()
 	{
 		rigidBody.AddForce (new Vector2 (1000, 0));
@@ -22,13 +23,14 @@ public class PlayerController : MonoBehaviour
 
 		rigidBody.rotation = Mathf.Clamp (rigidBody.rotation, -50, 50);
 
+		//Checks for input if the player should jump
 		if (onGround && (Input.GetButtonDown ("Jump") || Input.touchCount > 0)) {
 			rigidBody.velocity += jumpSpeed * Vector2.up;
 			onGround = false;
 		}
 	}
 
-	//Used for checking if the player is touching the ground
+	//Checking if the player is touching the ground
 	void OnCollisionEnter2D (Collision2D coll)
 	{
 		if (coll.gameObject.tag == "Terrain") {
