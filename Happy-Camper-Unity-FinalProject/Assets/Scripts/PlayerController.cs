@@ -18,8 +18,8 @@ public class PlayerController : MonoBehaviour
 	// FixedUpdate should be used instead of Update when dealing with rigidbodies
 	void FixedUpdate ()
 	{
-		rigidBody.AddForce (new Vector2 (1000, 0));
-		rigidBody.velocity = Vector2.ClampMagnitude (rigidBody.velocity, 40);
+		rigidBody.AddForce (new Vector2 (700, 0));
+		rigidBody.velocity = Vector2.ClampMagnitude (rigidBody.velocity, 20);
 
 		rigidBody.rotation = Mathf.Clamp (rigidBody.rotation, -50, 50);
 

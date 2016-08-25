@@ -20,6 +20,7 @@ public class TerrainMesh : MonoBehaviour
 
 	public Vector3 endPoint; 
 
+	public TerrainGenerator terrainGenerator;
 
 	void Start ()
 	{
@@ -28,18 +29,18 @@ public class TerrainMesh : MonoBehaviour
 
 	public void GenerateTerrain ()
 	{
+		vertices.Clear();
+		triangles.Clear ();
+		borderPoints.Clear ();
+		textureCoords.Clear ();
+
 		// Get a reference to the mesh component and clear it
 		MeshFilter filter = GetComponent<MeshFilter> ();
 		mesh = filter.mesh;
 
 		mesh.Clear ();
 
-		// Generate 4 random points for the top 
-		points = new Vector3[5];
-		for (int i = 0; i < points.Length; i++) {            
-			points [i] = new Vector3 (10f * (float)i, Random.Range (5f, 10f), 0f);
-		}
-
+		points = terrainGenerator.GenerateKeyPoints ();
 		CreateCurve ();
 
 		//Set the points for the edge collider
@@ -66,7 +67,7 @@ public class TerrainMesh : MonoBehaviour
 		Vector3 newPoint = Vector3.zero;
 
 		//The width of a segment
-		float terrainSegmentWidth = 2f;
+		float terrainSegmentWidth = 3f;
 
 		for (int i = 1; i < points.Length; i++) {
 			keyPoint0 = points [i - 1];
@@ -95,7 +96,7 @@ public class TerrainMesh : MonoBehaviour
 		borderPoints.Add (new Vector2 (point.x, point.y));
 
 		// Create a corresponding point along the bottom
-		vertices.Add (new Vector3 (point.x, 0f, 0f));
+		vertices.Add (new Vector3 (point.x, point.y - 10, 0f));
 		textureCoords.Add (new Vector2 (point.x / textureSize, 0));
 		// Then add our top point
 		vertices.Add (point);
