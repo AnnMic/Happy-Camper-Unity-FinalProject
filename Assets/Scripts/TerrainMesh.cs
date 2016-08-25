@@ -67,7 +67,7 @@ public class TerrainMesh : MonoBehaviour
 		Vector3 newPoint = Vector3.zero;
 
 		//The width of a segment
-		float terrainSegmentWidth = 3f;
+		float terrainSegmentWidth = 1f;
 
 		for (int i = 1; i < points.Length; i++) {
 			keyPoint0 = points [i - 1];
@@ -96,7 +96,7 @@ public class TerrainMesh : MonoBehaviour
 		borderPoints.Add (new Vector2 (point.x, point.y));
 
 		// Create a corresponding point along the bottom
-		vertices.Add (new Vector3 (point.x, point.y - 10, 0f));
+		vertices.Add (new Vector3 (point.x, point.y - 15, 0f));
 		textureCoords.Add (new Vector2 (point.x / textureSize, 0));
 		// Then add our top point
 		vertices.Add (point);

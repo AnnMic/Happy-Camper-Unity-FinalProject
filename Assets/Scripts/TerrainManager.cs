@@ -10,15 +10,14 @@ public class TerrainManager : MonoBehaviour
 	//holds the two terrains
 
 	private Transform cameraTransform;
-	private Camera camera;
 	private float camWidth = 0;
 	private float camHeight = 0;
 
 	// Use this for initialization
 	void Start ()
 	{
-		cameraTransform = Camera.main.transform;
-		camera = Camera.main;
+		Camera camera = Camera.main;
+		cameraTransform = camera.transform;
 
 		camHeight = 2f * camera.orthographicSize;
 		camWidth = camHeight * camera.aspect;
