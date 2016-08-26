@@ -13,6 +13,11 @@ public class TerrainManager : MonoBehaviour
 	private float camWidth = 0;
 	private float camHeight = 0;
 
+	void Awake(){
+		Application.targetFrameRate = 300;
+		Screen.sleepTimeout = SleepTimeout.NeverSleep;
+	}
+
 	// Use this for initialization
 	void Start ()
 	{

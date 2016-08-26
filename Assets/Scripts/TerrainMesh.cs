@@ -18,18 +18,38 @@ public class TerrainMesh : MonoBehaviour
 
 	private float textureSize = 1024;
 
-	public Vector3 endPoint; 
+	public Vector3 endPoint;
 
 	public TerrainGenerator terrainGenerator;
 
+	private static System.Random random = new System.Random ();
+
+	public GameObject treePrefab;
+	private List<GameObject> treePool = new List<GameObject> ();
+
+	public GameObject rockPrefab;
+	private List<GameObject> rockPool = new List<GameObject> ();
+
 	void Start ()
 	{
+		for (int i = 0; i < 15; i++) {
+			GameObject tree = GameObject.Instantiate (treePrefab);
+			tree.transform.SetParent (transform);
+			tree.SetActive (false);
+			treePool.Add (tree);
+		}
 
+		for (int i = 0; i < 4; i++) {
+			GameObject rock = GameObject.Instantiate (rockPrefab);
+			rock.transform.SetParent (transform);
+			rock.SetActive (false);
+			rockPool.Add (rock);
+		}
 	}
 
 	public void GenerateTerrain ()
 	{
-		vertices.Clear();
+		vertices.Clear ();
 		triangles.Clear ();
 		borderPoints.Clear ();
 		textureCoords.Clear ();
@@ -43,12 +63,15 @@ public class TerrainMesh : MonoBehaviour
 		points = terrainGenerator.GenerateKeyPoints ();
 		CreateCurve ();
 
+		CreateTrees ();
+		CreateRocks ();
+
 		//Set the points for the edge collider
 		EdgeCollider2D edgeCollider = GetComponent<EdgeCollider2D> ();
 		edgeCollider.Reset ();
 		edgeCollider.points = borderPoints.ToArray ();
 
-		endPoint = borderPoints[borderPoints.Count - 1];
+		endPoint = borderPoints [borderPoints.Count - 1];
 
 		// Assign the vertices and triangles to the mesh
 		mesh.vertices = vertices.ToArray ();
@@ -67,7 +90,7 @@ public class TerrainMesh : MonoBehaviour
 		Vector3 newPoint = Vector3.zero;
 
 		//The width of a segment
-		float terrainSegmentWidth = 1f;
+		float terrainSegmentWidth = 2f;
 
 		for (int i = 1; i < points.Length; i++) {
 			keyPoint0 = points [i - 1];
@@ -111,6 +134,44 @@ public class TerrainMesh : MonoBehaviour
 			triangles.Add (start + 1);
 			triangles.Add (start + 3);
 			triangles.Add (start + 2);    
+		}
+	}
+
+	void CreateTrees ()
+	{
+
+		int visibleTrees = Random.Range (10, 15); //Decide how many trees we want to show at this segment. Random number between 10 and 15. 
+
+		for (int i = 0; i < treePool.Count; i++) {
+			GameObject tree = treePool [i]; //get the tree
+
+			if (i < visibleTrees) {
+				int index = random.Next (borderPoints.Count);
+				Vector2 position = borderPoints [index];
+				tree.transform.localPosition = new Vector3 (position.x, position.y + 1.7f, 5);
+				tree.SetActive (true);
+			} else {
+				tree.SetActive (false);
+			}
+		}
+	}
+
+	void CreateRocks ()
+	{
+
+		int visibleTrees = Random.Range (10, 15); //Decide how many trees we want to show at this segment. Random number between 10 and 15. 
+
+		for (int i = 0; i < rockPool.Count; i++) {
+			GameObject rock = rockPool [i]; //get the tree
+
+			if (i < visibleTrees) {
+				int index = random.Next (borderPoints.Count);
+				Vector2 position = borderPoints [index];
+				rock.transform.localPosition = new Vector3 (position.x, position.y + 0.7f, 1);
+				rock.SetActive (true);
+			} else {
+				rock.SetActive (false);
+			}
 		}
 	}
 }

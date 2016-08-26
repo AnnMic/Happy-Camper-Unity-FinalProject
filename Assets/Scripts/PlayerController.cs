@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
 
 	private bool onGround = true;
 
+	private bool crached = false;
 	// Use this for initialization
 	void Start ()
 	{
@@ -18,10 +19,16 @@ public class PlayerController : MonoBehaviour
 	// FixedUpdate should be used instead of Update when dealing with rigidbodies
 	void FixedUpdate ()
 	{
-		rigidBody.AddForce (new Vector2 (700, 0));
-		rigidBody.velocity = Vector2.ClampMagnitude (rigidBody.velocity, 20);
+		if (crached) {
+			return;
+		}
+		rigidBody.velocity = Vector2.ClampMagnitude (rigidBody.velocity, 30);
 
 		rigidBody.rotation = Mathf.Clamp (rigidBody.rotation, -50, 50);
+
+		if (rigidBody.velocity.x < 10) {
+			rigidBody.AddForce (new Vector2 (1000, 1000));
+		}
 
 		//Checks for input if the player should jump
 		if (onGround && (Input.GetButtonDown ("Jump") || Input.touchCount > 0)) {
@@ -36,5 +43,9 @@ public class PlayerController : MonoBehaviour
 		if (coll.gameObject.tag == "Terrain") {
 			onGround = true;
 		}
+		else if (coll.gameObject.tag == "Rock") {
+			crached = true;
+		}
 	}
+
 }
